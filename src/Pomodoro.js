@@ -155,7 +155,7 @@ export default class Pomodoro extends Component {
 	
 	render() {
 		return (
-			<div className="wrapper" id="wrapper">
+			<div className="container" id="container">
 				<div className="title">Pomodoro Clock</div>
 				
 				<div className="break-label" id="break-label" onClick={ this.clear }>Break Length</div>

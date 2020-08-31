@@ -1,4 +1,4 @@
-.wrapper {
+.container {
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
 	grid-gap: 10px;
@@ -11,11 +11,11 @@
     border-radius: 10px;
 }
 
-.wrapper > :not(.title) {
+.container > :not(.title) {
     padding: 5px;
 }
 
-.wrapper > :not(.title) {
+.container > :not(.title) {
     border: 1px solid #f1f0f0;
     border-radius: 5px;
 }
