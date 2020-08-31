@@ -29,19 +29,15 @@
 
 #break-label {
 	grid-column: 1 / 4;
-	grid-row: 2;
-	background-color: #fd6d6d;
-    padding: 16px;
-    color: #fff;
-    text-align: center;
 }
 
 #session-label {
 	grid-column: 4 / 7;
+}
+
+#break-label, #session-label {
 	grid-row: 2;
-	background-color: #fd6d6d;
     padding: 16px;
-    color: #fff;
     text-align: center;
 }
 

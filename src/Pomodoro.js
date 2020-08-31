@@ -161,18 +161,31 @@ export default class Pomodoro extends Component {
 				<div className="break-label" id="break-label" onClick={ this.clear }>Break Length</div>
 				<div className="session-label" id="session-label" onClick={ this.clear }>Session Length</div>
 				
-				<div className="up-break" id="up-break" onClick={ this.addToExpression }>up</div>
+				<div className="up-break" id="up-break" onClick={ this.addToExpression }>
+					<i class="material-icons">add</i>	
+				</div>
 				<div className="time-break" id="time-break" onClick={ this.addToExpression }>time</div>
-				<div className="down-break" id="down-break" onClick={ this.addToExpression }>down</div>
+				<div className="down-break" id="down-break" onClick={ this.addToExpression }>
+					<i class="material-icons">remove</i>
+				</div>
 				
-				<div className="up-session" id="up-session" onClick={ this.addToExpression }>up</div>
+				<div className="up-session" id="up-session" onClick={ this.addToExpression }>
+					<i class="material-icons">add</i>
+				</div>
 				<div className="time-session" id="time-session" onClick={ this.addToExpression }>time</div>
-				<div className="down-session" id="down-session" onClick={ this.addToExpression }>down</div>
+				<div className="down-session" id="down-session" onClick={ this.addToExpression }>
+					<i class="material-icons">remove</i>
+				</div>
 				
 				<div className="session" id="ession" onClick={ this.addToExpression }>session</div>
 				
-				<div className="start-pause" id="start-pause" onClick={ this.addToExpression }>start/pause</div>
-				<div className="reset" id="reset" onClick={ this.addToExpression }>reset</div>
+				<div className="start-pause" id="start-pause" onClick={ this.addToExpression }>
+					<i class="material-icons">play_arrow</i>
+					<i class="material-icons">pause</i>
+				</div>
+				<div className="reset" id="reset" onClick={ this.addToExpression }>
+					<i class="material-icons">refresh</i>
+				</div>
 			</div>
 	)}
 }
