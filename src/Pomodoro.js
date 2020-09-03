@@ -121,7 +121,11 @@ export default class Pomodoro extends Component {
 	reset() {
 		this.setState({
 			breakLength: 5,
-			sessionLength: 25
+			sessionLength: 25,
+			minutes: 25,
+			seconds: 0,
+			pause: 1,
+			type: type[1]
 	    });
 	}
 	
