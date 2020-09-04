@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import './Pomodoro.css';
 
 let interval;
-const type = ['Break', 'Session'];
+const TYPE = ['Break', 'Session'];
+const BREAK = 0;
+const SESSION = 1;
+const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
 
 export default class Pomodoro extends Component {
 
@@ -15,10 +18,9 @@ export default class Pomodoro extends Component {
 			minutes: 0,
 			seconds: 1,
 			pause: 1,
-			type: type[1]
+			type: TYPE[SESSION]
 	    }
-	    
-	    this.addToExpression = this.addToExpression.bind(this);
+	
 	    this.breakIncrement = this.breakIncrement.bind(this);
 	    this.breakDecrement = this.breakDecrement.bind(this);
 	    this.sessionIncrement = this.sessionIncrement.bind(this);
@@ -26,10 +28,8 @@ export default class Pomodoro extends Component {
 	    this.start = this.start.bind(this);
 	    this.reset = this.reset.bind(this);
 	}
-	
-	addToExpression(e) {
-		let input = e.target.innerHTML;
-	}
+	    
+	audio = new Audio(AUDIO_URL)
 	
 	breakIncrement() {
 		this.setState(prevState => ({
@@ -97,11 +97,12 @@ export default class Pomodoro extends Component {
 				    if(seconds === 0) {
 				      if(minutes === 0) {
 				        this.setState({
-					        type: this.state.type === type[0] ? type[1] : type[0],
-					        minutes: this.state.type === 'Session' ? this.state.sessionLength : this.state.breakLength,
+					        type: this.state.type === TYPE[BREAK] ? TYPE[SESSION] : TYPE[BREAK],
+					        minutes: this.state.type === TYPE[SESSION] ? this.state.sessionLength : this.state.breakLength,
 					        seconds: 0
 				        },
 				        	() => {
+					        	this.audio.play();
 					        	clearInterval(interval);
 					        	this.start(1);
 					    	}
@@ -125,7 +126,9 @@ export default class Pomodoro extends Component {
 			minutes: 25,
 			seconds: 0,
 			pause: 1,
-			type: type[1]
+			type: TYPE[SESSION]
+	    }, () => {
+			clearInterval(interval)
 	    });
 	}
 	
@@ -155,6 +158,7 @@ export default class Pomodoro extends Component {
 				<div className="reset" id="reset" onClick={ this.reset }>
 					<i className="material-icons">refresh</i>
 				</div>
+				<audio id="beep" src={ AUDIO_URL }></audio>
 			</div>
 	)}
 }
