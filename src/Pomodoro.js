@@ -5,6 +5,8 @@ let interval;
 const TYPE = ['Break', 'Session'];
 const BREAK = 0;
 const SESSION = 1;
+const BREAK_LENGTH = 5;
+const SESSION_LENGTH = 25;
 const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
 
 export default class Pomodoro extends Component {
@@ -13,10 +15,10 @@ export default class Pomodoro extends Component {
 	    super(props)
 	    
 	    this.state = {
-			breakLength: 1,
-			sessionLength: 1,
-			minutes: 0,
-			seconds: 1,
+			breakLength: BREAK_LENGTH,
+			sessionLength: SESSION_LENGTH,
+			minutes: SESSION_LENGTH,
+			seconds: 0,
 			pause: 1,
 			type: TYPE[SESSION]
 	    }
@@ -32,47 +34,63 @@ export default class Pomodoro extends Component {
 	audio = new Audio(AUDIO_URL)
 	
 	breakIncrement() {
-		this.setState(prevState => ({
-			breakLength: (prevState.breakLength < 60) ? prevState.breakLength + 1 : 60
-		}), () => {
-	        this.setState({
-	            minutes: this.state.breakLength,
-	            seconds: 0
-	        })
-	    })
+		if(this.state.pause) {
+			this.setState(prevState => ({
+				breakLength: (prevState.breakLength < 60) ? prevState.breakLength + 1 : 60
+			}), () => {
+				if(this.state.type === TYPE[BREAK]) {
+			        this.setState({
+			            minutes: this.state.breakLength,
+			            seconds: 0
+			        })
+		        }
+		    })
+	    }
 	}
 	
 	breakDecrement() {
-		this.setState(prevState => ({
-			breakLength: (prevState.breakLength > 1) ? prevState.breakLength - 1 : 1
-		}), () => {
-	        this.setState({
-	            minutes: this.state.breakLength,
-	            seconds: 0
-	        })
-	    })
+		if(this.state.pause) {
+			this.setState(prevState => ({
+				breakLength: (prevState.breakLength > 1) ? prevState.breakLength - 1 : 1
+			}), () => {
+				if(this.state.type === TYPE[BREAK]) {
+			        this.setState({
+			            minutes: this.state.breakLength,
+			            seconds: 0
+			        })
+		        }
+		    })
+	    }
 	}
 	
 	sessionIncrement() {
-		this.setState(prevState => ({
-			sessionLength: (prevState.sessionLength < 60) ? prevState.sessionLength + 1 : 60
-		}), () => {
-	        this.setState({
-	            minutes: this.state.sessionLength,
-	            seconds: 0
-	        })
-	    })
+		if(this.state.pause) {
+			this.setState(prevState => ({
+				sessionLength: (prevState.sessionLength < 60) ? prevState.sessionLength + 1 : 60
+			}), () => {
+				if(this.state.type === TYPE[SESSION]) {
+			        this.setState({
+			            minutes: this.state.sessionLength,
+			            seconds: 0
+			        })
+		        }
+		    })
+	    }
 	}
 	
 	sessionDecrement() {
-		this.setState(prevState => ({
-			sessionLength: (prevState.sessionLength > 1) ? prevState.sessionLength - 1 : 1
-		}), () => {
-	        this.setState({
-	            minutes: this.state.sessionLength,
-	            seconds: 0
-	        })
-	    })
+		if(this.state.pause) {
+			this.setState(prevState => ({
+				sessionLength: (prevState.sessionLength > 1) ? prevState.sessionLength - 1 : 1
+			}), () => {
+				if(this.state.type === TYPE[SESSION]) {
+			        this.setState({
+			            minutes: this.state.sessionLength,
+			            seconds: 0
+			        })
+				}
+		    })
+	    }
 	}
 	
 	start(isCycle = 1) {
@@ -121,9 +139,9 @@ export default class Pomodoro extends Component {
 	
 	reset() {
 		this.setState({
-			breakLength: 5,
-			sessionLength: 25,
-			minutes: 25,
+			breakLength: BREAK_LENGTH,
+			sessionLength: SESSION_LENGTH,
+			minutes: SESSION_LENGTH,
 			seconds: 0,
 			pause: 1,
 			type: TYPE[SESSION]
