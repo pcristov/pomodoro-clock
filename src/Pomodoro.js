@@ -128,6 +128,8 @@ export default class Pomodoro extends Component {
 			pause: 1,
 			type: TYPE[SESSION]
 	    }, () => {
+		    this.audio.pause();
+		    this.audio.currentTime = 0;
 			clearInterval(interval)
 	    });
 	}
