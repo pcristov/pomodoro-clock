@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import './Pomodoro.css';
 
 let interval;
-const TYPE = ['Break', 'Session'];
+const TYPE_TEXT = ['Break', 'Session'];
 const BREAK = 0;
 const SESSION = 1;
 const BREAK_LENGTH = 5;
 const SESSION_LENGTH = 25;
+const INCREMENT = 1;
+const DECREMENT = 0;
 const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
 
 export default class Pomodoro extends Component {
@@ -20,75 +22,32 @@ export default class Pomodoro extends Component {
 			minutes: SESSION_LENGTH,
 			seconds: 0,
 			pause: 1,
-			type: TYPE[SESSION]
+			type: SESSION
 	    }
-	
-	    this.breakIncrement = this.breakIncrement.bind(this);
-	    this.breakDecrement = this.breakDecrement.bind(this);
-	    this.sessionIncrement = this.sessionIncrement.bind(this);
-	    this.sessionDecrement = this.sessionDecrement.bind(this);
+
+	    this.update = this.update.bind(this);
 	    this.start = this.start.bind(this);
 	    this.reset = this.reset.bind(this);
 	}
 	    
 	audio = new Audio(AUDIO_URL)
 	
-	breakIncrement() {
+	update(e) {
+		const operation = parseInt(e.currentTarget.dataset.operation);	// 1 (increment) or 0 (decrement)
+		const type =  parseInt(e.currentTarget.dataset.type);	// 1 (session) or 0 (break)
+		const typeText =  TYPE_TEXT[type].toLowerCase();	// session or break
+		const lengthKey = `${ typeText }Length`;	//sessionLength or breakLength
+		
 		if(this.state.pause) {
 			this.setState(prevState => ({
-				breakLength: (prevState.breakLength < 60) ? prevState.breakLength + 1 : 60
+				[`${ lengthKey }`]: (operation === INCREMENT) ? ((prevState.[`${ lengthKey }`] < 60) ? prevState.[`${ lengthKey }`] + 1 : 60) : ((prevState.[`${ lengthKey }`] > 1) ? prevState.[`${ lengthKey }`] - 1 : 1)
 			}), () => {
-				if(this.state.type === TYPE[BREAK]) {
+				if(this.state.type === type) {
 			        this.setState({
-			            minutes: this.state.breakLength,
+			            minutes: this.state.[`${ lengthKey }`],
 			            seconds: 0
 			        })
 		        }
-		    })
-	    }
-	}
-	
-	breakDecrement() {
-		if(this.state.pause) {
-			this.setState(prevState => ({
-				breakLength: (prevState.breakLength > 1) ? prevState.breakLength - 1 : 1
-			}), () => {
-				if(this.state.type === TYPE[BREAK]) {
-			        this.setState({
-			            minutes: this.state.breakLength,
-			            seconds: 0
-			        })
-		        }
-		    })
-	    }
-	}
-	
-	sessionIncrement() {
-		if(this.state.pause) {
-			this.setState(prevState => ({
-				sessionLength: (prevState.sessionLength < 60) ? prevState.sessionLength + 1 : 60
-			}), () => {
-				if(this.state.type === TYPE[SESSION]) {
-			        this.setState({
-			            minutes: this.state.sessionLength,
-			            seconds: 0
-			        })
-		        }
-		    })
-	    }
-	}
-	
-	sessionDecrement() {
-		if(this.state.pause) {
-			this.setState(prevState => ({
-				sessionLength: (prevState.sessionLength > 1) ? prevState.sessionLength - 1 : 1
-			}), () => {
-				if(this.state.type === TYPE[SESSION]) {
-			        this.setState({
-			            minutes: this.state.sessionLength,
-			            seconds: 0
-			        })
-				}
 		    })
 	    }
 	}
@@ -115,8 +74,8 @@ export default class Pomodoro extends Component {
 				    if(seconds === 0) {
 				      if(minutes === 0) {
 				        this.setState({
-					        type: this.state.type === TYPE[BREAK] ? TYPE[SESSION] : TYPE[BREAK],
-					        minutes: this.state.type === TYPE[SESSION] ? this.state.sessionLength : this.state.breakLength,
+					        type: this.state.type === SESSION ? BREAK : SESSION,
+					        minutes: this.state.type === SESSION ? this.state.sessionLength : this.state.breakLength,
 					        seconds: 0
 				        },
 				        	() => {
@@ -144,10 +103,10 @@ export default class Pomodoro extends Component {
 			minutes: SESSION_LENGTH,
 			seconds: 0,
 			pause: 1,
-			type: TYPE[SESSION]
+			type: SESSION
 	    }, () => {
-		    this.audio.pause();
-		    this.audio.currentTime = 0;
+		    this.audio.pause();	// stop sound
+		    this.audio.currentTime = 0;	// rewound
 			clearInterval(interval)
 	    });
 	}
@@ -157,18 +116,18 @@ export default class Pomodoro extends Component {
 			<div className="container" id="container">
 				<div className="title"><h3>Pomodoro Clock</h3></div>
 				
-				<div className="break-label" id="break-label">Break</div>
-				<div className="session-label" id="session-label">Session</div>
+				<div className="break-label" id="break-label">Break Length</div>
+				<div className="session-label" id="session-label">Session Length</div>
 				
-				<div className="break-decrement" id="break-decrement" onClick={ this.breakDecrement }><i className="material-icons">remove_circle</i></div>
+				<div className="break-decrement" id="break-decrement" onClick={ this.update } data-type={ BREAK } data-operation={ DECREMENT }><i className="material-icons">remove_circle</i></div>
 				<div className="break-length" id="break-length">{ this.state.breakLength }</div>
-				<div className="break-increment" id="break-increment" onClick={ this.breakIncrement }><i className="material-icons">add_circle</i></div>
+				<div className="break-increment" id="break-increment" onClick={ this.update } data-type={ BREAK } data-operation={ INCREMENT }><i className="material-icons">add_circle</i></div>
 				
-				<div className="session-decrement" id="session-decrement" onClick={ this.sessionDecrement }><i className="material-icons">remove_circle</i></div>
+				<div className="session-decrement" id="session-decrement" onClick={ this.update } data-type={ SESSION } data-operation={ DECREMENT }><i className="material-icons">remove_circle</i></div>
 				<div className="session-length" id="session-length">{ this.state.sessionLength }</div>
-				<div className="session-increment" id="session-increment" onClick={ this.sessionIncrement }><i className="material-icons">add_circle</i></div>
+				<div className="session-increment" id="session-increment" onClick={ this.update } data-type={ SESSION } data-operation={ INCREMENT }><i className="material-icons">add_circle</i></div>
 				
-				<div className="timer-label" id="timer-label">{ this.state.type }</div>
+				<div className="timer-label" id="timer-label">{ TYPE_TEXT[this.state.type] }</div>
 				<div className="time-left" id="time-left">{ this.state.minutes }:{ this.state.seconds < 10 ? `0${ this.state.seconds }` : this.state.seconds }</div>
 				
 				<div className="start_stop" id="start_stop" onClick={ this.start }>
