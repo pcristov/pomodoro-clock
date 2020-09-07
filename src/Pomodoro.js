@@ -10,7 +10,6 @@ const SESSION_LENGTH = 25;
 const INCREMENT = 1;
 const DECREMENT = 0;
 const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav";
-const AUDIO = new Audio(AUDIO_URL);
 
 export default class Pomodoro extends Component {
 
@@ -25,6 +24,8 @@ export default class Pomodoro extends Component {
 			pause: 1,
 			type: SESSION
 	    }
+	    
+	    this.audio = React.createRef();
 
 	    this.update = this.update.bind(this);
 	    this.start = this.start.bind(this);
@@ -72,13 +73,13 @@ export default class Pomodoro extends Component {
 				    
 				    if(seconds === 0) {
 				      if(minutes === 0) {
-				        this.setState({
-					        type: this.state.type === SESSION ? BREAK : SESSION,
-					        minutes: this.state.type === SESSION ? this.state.sessionLength : this.state.breakLength,
+				        this.setState(prevState => ({
+					        type: prevState.type === SESSION ? BREAK : SESSION,
+					        minutes: prevState.type === SESSION ? this.state.breakLength : this.state.sessionLength,
 					        seconds: 0
-				        },
+				        }),
 				        	() => {
-					        	AUDIO.play();
+					        	this.audio.current.play();
 					        	clearInterval(interval);
 					        	this.start(1);
 					    	}
@@ -104,8 +105,8 @@ export default class Pomodoro extends Component {
 			pause: 1,
 			type: SESSION
 	    }, () => {
-		    AUDIO.pause();	// stop sound
-		    AUDIO.currentTime = 0;	// rewound
+		    this.audio.current.pause();	// stop sound
+		    this.audio.current.currentTime = 0;	// rewound
 			clearInterval(interval)
 	    });
 	}
@@ -136,7 +137,7 @@ export default class Pomodoro extends Component {
 				<div className="reset" id="reset" onClick={ this.reset }>
 					<i className="material-icons">refresh</i>
 				</div>
-				<audio id="beep" src={ AUDIO_URL }></audio>
+				<audio ref={ this.audio } id="beep" src={ AUDIO_URL }></audio>
 			</div>
 	)}
 }
