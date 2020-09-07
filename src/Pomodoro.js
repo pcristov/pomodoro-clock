@@ -10,7 +10,7 @@ const SESSION_LENGTH = 25;
 const INCREMENT = 1;
 const DECREMENT = 0;
 const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav";
-const audio = new Audio(AUDIO_URL);
+const AUDIO = new Audio(AUDIO_URL);
 
 export default class Pomodoro extends Component {
 
@@ -78,7 +78,7 @@ export default class Pomodoro extends Component {
 					        seconds: 0
 				        },
 				        	() => {
-					        	audio.play();
+					        	AUDIO.play();
 					        	clearInterval(interval);
 					        	this.start(1);
 					    	}
@@ -104,8 +104,8 @@ export default class Pomodoro extends Component {
 			pause: 1,
 			type: SESSION
 	    }, () => {
-		    audio.pause();	// stop sound
-		    audio.currentTime = 0;	// rewound
+		    AUDIO.pause();	// stop sound
+		    AUDIO.currentTime = 0;	// rewound
 			clearInterval(interval)
 	    });
 	}
