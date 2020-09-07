@@ -127,7 +127,7 @@ export default class Pomodoro extends Component {
 				<div className="session-increment" id="session-increment" onClick={ this.update } data-type={ SESSION } data-operation={ INCREMENT }><i className="material-icons">add_circle</i></div>
 				
 				<div className="timer-label" id="timer-label">{ TYPE_TEXT[this.state.type] }</div>
-				<div className="time-left" id="time-left">{ this.state.minutes }:{ this.state.seconds < 10 ? `0${ this.state.seconds }` : this.state.seconds }</div>
+				<div className="time-left" id="time-left" dangerouslySetInnerHTML={{__html: this.state.minutes + ':' + (this.state.seconds < 10 ? `0${ this.state.seconds }` : this.state.seconds) }}></div>
 				
 				<div className="start_stop" id="start_stop" onClick={ this.start }>
 					<i className="material-icons">play_arrow</i>
