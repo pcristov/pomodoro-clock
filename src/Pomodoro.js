@@ -9,7 +9,8 @@ const BREAK_LENGTH = 5;
 const SESSION_LENGTH = 25;
 const INCREMENT = 1;
 const DECREMENT = 0;
-const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+const AUDIO_URL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav";
+const audio = new Audio(AUDIO_URL);
 
 export default class Pomodoro extends Component {
 
@@ -29,8 +30,6 @@ export default class Pomodoro extends Component {
 	    this.start = this.start.bind(this);
 	    this.reset = this.reset.bind(this);
 	}
-	    
-	audio = new Audio(AUDIO_URL)
 	
 	update(e) {
 		const operation = parseInt(e.currentTarget.dataset.operation);	// 1 (increment) or 0 (decrement)
@@ -40,11 +39,11 @@ export default class Pomodoro extends Component {
 		
 		if(this.state.pause) {
 			this.setState(prevState => ({
-				[`${ lengthKey }`]: (operation === INCREMENT) ? ((prevState.[`${ lengthKey }`] < 60) ? prevState.[`${ lengthKey }`] + 1 : 60) : ((prevState.[`${ lengthKey }`] > 1) ? prevState.[`${ lengthKey }`] - 1 : 1)
+				[`${ lengthKey }`]: operation === INCREMENT ? prevState[`${ lengthKey }`] < 60 ? prevState[`${ lengthKey }`] + 1 : 60 : prevState[`${ lengthKey }`] > 1 ? prevState[`${ lengthKey }`] - 1 : 1
 			}), () => {
 				if(this.state.type === type) {
 			        this.setState({
-			            minutes: this.state.[`${ lengthKey }`],
+			            minutes: this.state[`${ lengthKey }`],
 			            seconds: 0
 			        })
 		        }
@@ -79,7 +78,7 @@ export default class Pomodoro extends Component {
 					        seconds: 0
 				        },
 				        	() => {
-					        	this.audio.play();
+					        	audio.play();
 					        	clearInterval(interval);
 					        	this.start(1);
 					    	}
@@ -105,8 +104,8 @@ export default class Pomodoro extends Component {
 			pause: 1,
 			type: SESSION
 	    }, () => {
-		    this.audio.pause();	// stop sound
-		    this.audio.currentTime = 0;	// rewound
+		    audio.pause();	// stop sound
+		    audio.currentTime = 0;	// rewound
 			clearInterval(interval)
 	    });
 	}
